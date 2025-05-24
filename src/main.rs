@@ -1,5 +1,5 @@
 mod app;
-mod search_engine; // Add this line
+mod search_engine;
 
 use app::*;
 use leptos::prelude::*;

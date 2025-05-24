@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
-use crate::search_engine::{Action, SearchEngine}; // Import new types
+use crate::search_engine::{Action, SearchEngine};
 
 #[wasm_bindgen]
 extern "C" {
@@ -25,7 +25,7 @@ pub fn App() -> impl IntoView {
     });
 
     let height_style = Memo::new(move |_| {
-        if !search_query.get().is_empty() { // Keep content area visible if actively searching
+        if !search_query.get().is_empty() {
             "height: 500px;".to_string()
         } else {
             "height: 0;".to_string()
@@ -67,7 +67,6 @@ pub fn App() -> impl IntoView {
                 </div>
 
                 <div class="bottom-section" style=move || height_style.get()>
-                    // You could add a count of results or other info here
                     {move || if !search_results.get().is_empty() {
                         format!("{} results found", search_results.get().len())
                     } else if !search_query.get().is_empty() {
