@@ -1,6 +1,6 @@
+use crate::search_engine::{Action, SearchEngine};
 use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
-use crate::search_engine::{Action, SearchEngine};
 
 #[wasm_bindgen]
 extern "C" {
@@ -14,7 +14,7 @@ pub fn App() -> impl IntoView {
     let search_engine = store_value(SearchEngine::new());
     let (search_results, set_search_results) = signal(Vec::<Action>::new());
 
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let query = search_query.get();
         if query.trim().is_empty() {
             set_search_results.set(Vec::new());

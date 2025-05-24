@@ -1,3 +1,5 @@
+mod applications;
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Action {
     pub name: String,
@@ -14,6 +16,14 @@ pub struct SearchEngine {
     custom_action_rules: Vec<CustomActionRule>,
 }
 
+pub trait CustomAction {
+    fn register(&self) -> CustomActionRule;
+    // The action for this action. e.g for applications
+    // is this the function which will execute whatever
+    // the actions is doing
+    fn action(&self);
+}
+
 impl SearchEngine {
     pub fn new() -> Self {
         let mut se = SearchEngine {
@@ -27,7 +37,7 @@ impl SearchEngine {
                 description: "Placeholder: Command to switch the current song.".to_string(),
             },
         });
-        
+
         se
     }
 
@@ -42,16 +52,6 @@ impl SearchEngine {
         if lower_query.is_empty() {
             return results;
         }
-
-        if "brave browser".starts_with(&lower_query) || (lower_query.starts_with("bra") && !"brave browser".starts_with(&lower_query) && lower_query.len() <= "brave browser".len()) {
-            if lower_query == "bra" || lower_query == "brav" || lower_query == "brave" {
-                 results.push(Action {
-                    name: "Brave Browser".to_string(),
-                    description: "Launch Brave Browser".to_string(),
-                });
-            }
-        }
-
 
         let parts: Vec<&str> = lower_query.split_whitespace().collect();
         if parts.len() == 3 {
@@ -76,11 +76,11 @@ impl SearchEngine {
         for rule in &self.custom_action_rules {
             if lower_query.contains(&rule.keyword.to_lowercase()) {
                 if !results.iter().any(|r| r.name == rule.action_to_return.name) {
-                     results.push(rule.action_to_return.clone());
+                    results.push(rule.action_to_return.clone());
                 }
             }
         }
-        
+
         results
     }
 }
